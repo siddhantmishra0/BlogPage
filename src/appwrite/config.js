@@ -1,5 +1,5 @@
-import conf from '../conf/conf'
-import {Client, ID, Databases, Storage, Query} from 'appwrite'
+import conf from '../conf/conf.js'
+import {Client, ID, Databases, Storage, Query} from 'appwrite';
 
 export class Service{
     client = new Client()
@@ -21,11 +21,10 @@ export class Service{
                 slug,
                 {
                     title,
-                    slug,
                     content,
                     featuredImage,
                     status,
-                    userId
+                    userId,
                 }
             ) 
         } catch (error) {
@@ -44,7 +43,6 @@ export class Service{
                 content,
                 featuredImage,
                 status,
-                userId
                 }
             )
         } catch (error) {
@@ -53,15 +51,15 @@ export class Service{
     }
     async deletePost(slug){
         try {
-            return await this.databases.deleteDocument(
+            await this.databases.deleteDocument(
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionId,
                 slug
             )
-            return true;
+            return true
         } catch (error) {
             console.log("Appwrite service :: getCurrentUser :: error",error);
-            return false;
+            return false
         }
     }
 
@@ -74,16 +72,16 @@ export class Service{
             )
         } catch (error) {
             console.log("Appwrite service :: getCurrentUser :: error",error);
-            return false;
+            return false
         }
     }
 
-    async getPosts(queries = Query.equal("status","active")){
+    async getPosts(queries = [Query.equal("status","active")]){
         try {
             return await this.databases.listDocuments(
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionId,
-                queries
+                queries,
             )
         } catch (error) {
             console.log("Appwrite service :: getCurrentUser :: error",error);
@@ -106,19 +104,19 @@ export class Service{
 
     async deleteFile(fileId){
         try {
-            return await  this.bucket.deleteFile(
+            await this.bucket.deleteFile(
                 conf.appwriteBucketId,
                 fileId
             )
-            return true;
+            return true
         } catch (error) {
             console.log("Appwrite  service :: getCurrentUser :: error",error);
-            return false;
+            return false
         }
     }
 
     getFilePreview(fileId){
-        this.bucket.getFilePreview(
+        return this.bucket.getFilePreview(
             conf.appwriteBucketId,
             fileId
         )
@@ -126,6 +124,6 @@ export class Service{
     
 }
 
-const service = new Service();
+const appwriteService = new Service();
 
-export default Service;
+export default appwriteService  ;
